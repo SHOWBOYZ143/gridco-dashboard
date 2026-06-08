@@ -19,6 +19,7 @@ app.add_middleware(
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
+    allow_credentials=True,
 )
 
 # ── Safe worker count — threads not processes to avoid segfaults ─────────────

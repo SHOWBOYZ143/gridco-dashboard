@@ -12,7 +12,7 @@ import LoadCurvesTab     from './tabs/LoadCurvesTab';
 import VoltageTrendsTab  from './tabs/VoltageTrendsTab';
 import TrendsTab         from './tabs/TrendsTab';
 
-const API = 'http://localhost:8000';
+const API = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 
 const TABS = [
