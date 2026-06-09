@@ -45,6 +45,15 @@ def _to_dict(obj):
     return obj
 
 
+# ── Health check ─────────────────────────────────────────────────────────────
+@app.get("/")
+async def root():
+    return {"status": "ok", "service": "GRIDco Dashboard API"}
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
 # ── Single file endpoint ──────────────────────────────────────────────────────
 @app.post("/parse")
 async def parse(file: UploadFile = File(...)):
