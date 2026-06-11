@@ -3,7 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, Cell
 const fmt=(n,d=4)=>n!=null?Number(n).toLocaleString(undefined,{maximumFractionDigits:d}):'—';
 const TT={ contentStyle:{ background:'#1e293b', border:'1px solid rgba(255,255,255,0.12)', borderRadius:8, fontSize:12, color:'#f1f5f9' }, labelStyle:{ color:'#94a3b8' }, itemStyle:{ color:'#f1f5f9' } };
 export default function HydrologyFuelTab({ data }) {
-  const hydrology=data.hydrology||[];const gas=data.gas_supply||[];const fuel=data.liquid_fuel_stocks||[];
+  const hydrology=(data.hydrology||[]).filter(h=>h.station_name!=='Nangbeto (m)');const gas=data.gas_supply||[];const fuel=data.liquid_fuel_stocks||[];
   const hydroChart=hydrology.filter(h=>h.present_headwater_level!=null).map(h=>({name:h.station_name,present:h.present_headwater_level,previous:h.previous_headwater_level}));
   const fuelChart=fuel.map(f=>({name:`${f.location} ${f.fuel_type}`,qty:f.quantity_bbls}));
   return (

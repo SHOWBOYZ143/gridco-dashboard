@@ -10,8 +10,10 @@ export default function UnitLoadingsTab({ data }) {
   const units  = data.unit_loadings || [];
   const totals = units.filter(u => u.is_total_row);
 
+  const plantGeneration = (data.plant_generation || []).filter(p => p.plant_group !== 'CEB');
+
   const gwhByPlant = Object.fromEntries(
-    (data.plant_generation || []).map(p => [p.plant_name, p.total_generation_gwh])
+    plantGeneration.map(p => [p.plant_name, p.total_generation_gwh])
   );
 
   // Power factor fallback: use unit_loadings total rows when plant_generation doesn't carry it
@@ -29,7 +31,7 @@ export default function UnitLoadingsTab({ data }) {
   );
 
   const coveredNames = new Set(plantTotals.map(t => t.plant_name));
-  const extraPlants  = (data.plant_generation || [])
+  const extraPlants  = plantGeneration
     .filter(p => p.plant_name && !coveredNames.has(p.plant_name))
     .map(p => ({ plant_name: p.plant_name, plant_group: p.plant_group, mw: p.mw_at_peak, power_factor: p.power_factor, is_total_row: true }));
   const allPlants = [...plantTotals, ...extraPlants];
@@ -41,7 +43,7 @@ export default function UnitLoadingsTab({ data }) {
 
   // GWh totals per group for donut
   const gwhGroups = {};
-  (data.plant_generation || []).forEach(p => {
+  plantGeneration.forEach(p => {
     if (p.plant_group && p.total_generation_gwh) {
       gwhGroups[p.plant_group] = (gwhGroups[p.plant_group] || 0) + p.total_generation_gwh;
     }
@@ -50,7 +52,7 @@ export default function UnitLoadingsTab({ data }) {
     .filter(([, v]) => v > 0)
     .map(([k, v]) => ({ name: k.charAt(0) + k.slice(1).toLowerCase(), value: v, group: k }));
 
-  const sortedTable = [...(data.plant_generation || [])]
+  const sortedTable = [...plantGeneration]
     .sort((a, b) => (b.mw_at_peak || 0) - (a.mw_at_peak || 0));
 
   return (
